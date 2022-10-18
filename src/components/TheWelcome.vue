@@ -39,7 +39,7 @@
           :maxlength="1"
           class="title"
           :id="`code-${i}`"
-          :placeholder="i + 1"
+          :placeholder="(i + 1).toString()"
           @input="addChart(positiveInputs[i])"
         />
       </template>
@@ -52,7 +52,7 @@
           :maxlength="length - 1"
           class="title"
           :id="`code-${i}`"
-          :placeholder="i + 1"
+          :placeholder="(i + 1).toString()"
           @input="addChart(negativeInputs[i])"
         />
       </template>
@@ -75,7 +75,7 @@
 </template>
 <script setup lang="ts">
   import words from '@/data/words.json'
-  import { Ref, ref, watch } from 'vue'
+  import { type Ref, ref, watch } from 'vue'
   import WordsFoundComponent from './WordsFoundComponent.vue'
 
   const length = ref<number>(6)
