@@ -1,8 +1,6 @@
 <template>
   <header>
-    <div class="wrapper">
-      <title-component title="Поиск слов по буквам" />
-    </div>
+    <title-component title="Поиск слов по буквам" />
   </header>
   <main>
     <the-welcome />
@@ -21,15 +19,8 @@
 
   @media (min-width: 1024px) {
     header {
-      display: flex;
-      place-items: center;
+      //display: flex; place-items: center;
       padding-right: calc(var(--section-gap) / 2);
-    }
-
-    header .wrapper {
-      display: flex;
-      place-items: flex-start;
-      flex-wrap: wrap;
     }
   }
 </style>
