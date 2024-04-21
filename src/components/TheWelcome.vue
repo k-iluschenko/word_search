@@ -1,84 +1,106 @@
 <template>
   <div class="container">
-    <div>
-      <img src="@/assets/game.png" alt="example" height="200" />
-      <img src="@/assets/example_2.jpg" alt="example" height="200" />
-      <p>
-        Предназначено для помощи в игре "угадай слово". Указываешь какой длины слово,
-        какие буквы есть, а каких нет. Так же можно указать на каких местах были найдены
-        буквы.
-      </p>
-    </div>
-
-    <div class="findWords">
-      <label>
-        <span>Длина слова</span>
-        <input v-model="length" />
-      </label>
-    </div>
-    <div class="findWords">
-      <label>
-        <span>Буквы которых нет в слове</span>
-        <input v-model="negativeLetters" />
-      </label>
-    </div>
-    <div class="findWords">
-      <label>
-        <span>Слово содержит буквы</span>
-        <input v-model="positiveLetters" />
-      </label>
-      <p>* чаще всего встречаются буквы о, е, а, и, н, т, с, р, в, л</p>
-      <p>* буквы можно вводить через пробел, запятую или слитно</p>
-    </div>
-
-    <div class="signUpCode">
-      <p>Указываем букву которую угадали</p>
-      <template v-for="(k, i) in positiveInputs" :key="i">
-        <input
-          v-model="positiveInputs[i]"
-          :maxlength="1"
-          class="title"
-          :id="`code-${i}`"
-          :placeholder="(i + 1).toString()"
-          @input="addChart(positiveInputs[i])"
-        />
-      </template>
-    </div>
-    <div class="signUpCode excludeCharts">
-      <p>Буквы есть, но они должны стоять на другом месте</p>
-      <template v-for="(k, i) in negativeInputs" :key="i">
-        <input
-          v-model="negativeInputs[i]"
-          :maxlength="length - 1"
-          class="title"
-          :id="`code-${i}`"
-          :placeholder="(i + 1).toString()"
-          @input="addChart(negativeInputs[i])"
-        />
-      </template>
-    </div>
-    <div class="button_container">
-      <button @click="findWords()">Подобрать слова</button>
-      <button @click="newWord()">Новое слово</button>
-    </div>
-    <div>
-      <a
-        href="https://ru.wikipedia.org/wiki/%D0%A7%D0%B0%D1%81%D1%82%D0%BE%D1%82%D0%BD%D0%BE%D1%81%D1%82%D1%8C"
-        target="_blank"
-        >Частотность букв русского языка</a
-      >
-    </div>
     <section>
-      <words-found-component :wordsList="wordsList" />
+      <div>
+        <img src="@/assets/game.png" alt="example" height="200" />
+        <img src="@/assets/example_2.jpg" alt="example" height="200" />
+        <p>
+          Предназначено для помощи в игре "угадай слово". Указываешь какой длины слово,
+          какие буквы есть, а каких нет. Так же можно указать на каких местах были найдены
+          буквы.
+        </p>
+      </div>
+    </section>
+    <section>
+      <div class="findWords">
+        <label>
+          <span>Длина слова</span>
+          <input v-model="length" />
+        </label>
+      </div>
+      <div class="findWords">
+        <label>
+          <span>Буквы которых нет в слове</span>
+          <input v-model="negativeLetters" />
+        </label>
+      </div>
+      <div
+        :style="{
+          display: 'flex',
+          justifyContent: 'center'
+        }"
+        v-for="groupLetters in letters"
+        :key="groupLetters"
+      >
+        <WKey
+          v-for="letter in groupLetters"
+          :key="letter"
+          :letter="letter"
+          :isPress="findLetter(letter)"
+          @press="changeLetters"
+        ></WKey>
+      </div>
+      <div class="findWords">
+        <label>
+          <span>Слово содержит буквы</span>
+          <input v-model="positiveLetters" />
+        </label>
+        <p>* чаще всего встречаются буквы о, е, а, и, н, т, с, р, в, л</p>
+        <p>* буквы можно вводить через пробел, запятую или слитно</p>
+      </div>
+      <div class="signUpCode">
+        <p>Указываем букву которую угадали</p>
+        <template v-for="(k, i) in positiveInputs" :key="i">
+          <input
+            v-model="positiveInputs[i]"
+            :maxlength="1"
+            class="title"
+            :id="`code-${i}`"
+            :placeholder="(i + 1).toString()"
+            @input="addChart(positiveInputs[i])"
+          />
+        </template>
+      </div>
+      <div class="signUpCode excludeCharts">
+        <p>Буквы есть, но они должны стоять на другом месте</p>
+        <template v-for="(k, i) in negativeInputs" :key="i">
+          <input
+            v-model="negativeInputs[i]"
+            :maxlength="length - 1"
+            class="title"
+            :id="`code-${i}`"
+            :placeholder="(i + 1).toString()"
+            @input="addChart(negativeInputs[i])"
+          />
+        </template>
+      </div>
+
+      <div class="button_container">
+        <button @click="findWords()">Подобрать слова</button>
+        <button @click="newWord()">Новое слово</button>
+      </div>
+      <div>
+        <a
+          href="https://ru.wikipedia.org/wiki/%D0%A7%D0%B0%D1%81%D1%82%D0%BE%D1%82%D0%BD%D0%BE%D1%81%D1%82%D1%8C"
+          target="_blank"
+          >Частотность букв русского языка</a
+        >
+      </div>
+      <section>
+        <words-found-component :wordsList="wordsList" />
+      </section>
     </section>
   </div>
 </template>
 <script setup lang="ts">
   import words from '@/data/words.json'
+  import words1 from '@/data/words1.json'
+  import letters from '@/data/letters.json'
   import { type Ref, ref, watch } from 'vue'
   import WordsFoundComponent from './WordsFoundComponent.vue'
+  import WKey from '@/components/WKey.vue'
 
-  const length = ref<number>(6)
+  const length = ref<number>(5)
   const wordsList = ref<string[]>([])
   const negativeLetters = ref<string>('')
   const positiveLetters = ref<string>('')
@@ -88,12 +110,28 @@
 
   // Сбрасываем значения на дефолтные
   const newWord = () => {
-    length.value = 6
+    length.value = 5
     wordsList.value = []
     negativeLetters.value = ''
     positiveLetters.value = ''
     positiveInputs.value = new Array<string>(length.value).fill('')
     negativeInputs.value = new Array<string>(length.value).fill('')
+  }
+
+  const findLetter = (letter: string): boolean => {
+    return negativeLetters.value.includes(letter)
+  }
+
+  const changeLetters = (letters: string) => {
+    if (findLetter(letters)) {
+      negativeLetters.value = negativeLetters.value
+        .trim()
+        .split('')
+        .filter((l) => l !== letters)
+        .join('')
+    } else {
+      negativeLetters.value = negativeLetters.value.trim() + letters
+    }
   }
 
   watch(length, (newLength) => {
@@ -120,7 +158,9 @@
 
   // Фильтруем по длине
   const byLength = () => {
-    return words.filter((w: string) => w.length === +length.value)
+    const arrayWords = words1.map((w) => w.toLowerCase())
+    const newWords = new Set([...words, ...arrayWords])
+    return Array.from(newWords).filter((w: string) => w.length === +length.value)
   }
 
   // Фильтруем по известным буквам
@@ -166,10 +206,14 @@
 
 <style scoped lang="scss">
   .container {
-    width: 400px;
-    min-height: 100vh;
-    align-items: center;
+    width: 800px;
+    // min-height: 100vh;
+    // align-items: center;
     //display: flex;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
   }
 
   input {
