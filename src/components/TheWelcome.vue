@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section>
+    <section class="intro">
       <div>
         <img src="@/assets/game.png" alt="example" height="200" />
         <img src="@/assets/example_2.jpg" alt="example" height="200" />
@@ -13,7 +13,7 @@
     </section>
     <section>
       <div class="findWords">
-        <label>
+        <label class="label">
           <span>Длина слова</span>
           <input v-model="length" />
         </label>
@@ -141,7 +141,7 @@
 
   // Добавляем символы в positive input
   const addChart = (letter: string) => {
-    const letters = positiveLetters.value + letter
+    const letters = positiveLetters.value + letter.toLowerCase()
     const uniqueChart = new Set(letters)
     positiveLetters.value = Array.from(uniqueChart).join('')
   }
@@ -186,11 +186,13 @@
   const byPosition = (lettersList: Ref<string[]>, type: 'positive' | 'negative') => {
     if (!lettersList.value.join('')) return wordsList.value
     let fword = [...wordsList.value]
-    lettersList.value.forEach((c, i) => {
-      fword = fword.filter((w) => {
-        return type === 'positive' ? !c || w[i] === c : !c || !c.includes(w[i])
+    lettersList.value
+      .map((c) => c.toLowerCase())
+      .forEach((c, i) => {
+        fword = fword.filter((w) => {
+          return type === 'positive' ? !c || w[i] === c : !c || !c.includes(w[i])
+        })
       })
-    })
     return fword
   }
 
@@ -210,6 +212,11 @@
     // min-height: 100vh;
     // align-items: center;
     //display: flex;
+
+    @media (max-width: 1024px) {
+      max-width: 1024px;
+      width: auto;
+    }
 
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -262,6 +269,12 @@
     & label {
       display: flex;
       width: 400px;
+
+      @media (max-width: 1024px) {
+        width: auto;
+        flex-direction: column;
+        gap: 8px;
+      }
     }
 
     & span {
@@ -271,16 +284,26 @@
     & input {
       flex: 1;
       height: 39px;
+      flex-basis: 39px;
     }
 
     & p {
       color: #9f9d9d;
       font-size: 14px;
+
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
     }
   }
 
   .button_container {
     display: flex;
+    gap: 10px;
+
+    @media (max-width: 1024px) {
+      flex-direction: column;
+    }
 
     & button {
       width: 100%;
@@ -290,11 +313,12 @@
       background-color: #7ee0ac;
       border: 1px solid #4a8365;
       border-radius: 5px;
-      margin-left: 10px;
+    }
+  }
 
-      &:first-child {
-        margin-left: 0;
-      }
+  .intro {
+    @media (max-width: 1024px) {
+      display: none;
     }
   }
 </style>

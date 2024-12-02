@@ -22,13 +22,19 @@
 <style scoped lang="scss">
   button {
     width: 40px;
-    margin-top: 10px;
+    margin-top: 8px;
     height: 40px;
     place-items: center;
     background-color: #7ee0ac;
     border: 1px solid #4a8365;
     border-radius: 5px;
-    margin-left: 10px;
+    margin-left: 8px;
+
+    @media (max-width: 1024px) {
+      width: 28px;
+      height: 30px;
+      margin: 0;
+    }
 
     &:first-child {
       margin-left: 0;
